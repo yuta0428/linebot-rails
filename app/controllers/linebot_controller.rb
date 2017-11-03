@@ -9,10 +9,10 @@ class LinebotController < ApplicationController
     body = request.body.read
 
     # シグニチャが正しくなければエラー
-    # signature = request.env['HTTP_X_LINE_SIGNATURE']
-    # unless client.validate_signature(body, signature)
-    #   error 400 do 'Bad Request' end
-    # end
+    signature = request.env['HTTP_X_LINE_SIGNATURE']
+    unless client.validate_signature(body, signature)
+      error 400 do 'Bad Request' end
+    end
 
     # メッセージをパース
     events = client.parse_events_from(body)
@@ -28,7 +28,6 @@ class LinebotController < ApplicationController
             text: event.message['text']
           }
           response = client.reply_message(event['replyToken'], message)
-          p '----------'
           p response
         end
       end
