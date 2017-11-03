@@ -88,4 +88,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # callbackリクエスト内容を保存するログファイル
+  config.another_logger = Logger.new(Rails.root.join('log/production_callback.log'))
 end

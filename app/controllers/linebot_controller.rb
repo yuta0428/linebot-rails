@@ -16,8 +16,10 @@ class LinebotController < ApplicationController
 
     # メッセージをパース
     events = client.parse_events_from(body)
-    p events
-    
+
+    # ログに保存
+    Rails.application.config.another_logger.info(events)
+
     events.each { |event|
       case event
       when Line::Bot::Event::Message
