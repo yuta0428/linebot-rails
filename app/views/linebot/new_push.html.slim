@@ -1,0 +1,36 @@
+header.masthead
+  .container
+    a.masthead-logo
+      span.mega-octicon.octicon-package
+        h1
+        | Line Messanger
+
+.container.mt-4
+  .Subhead
+    h2.Subhead-heading
+     | Send to message
+    p.Subhead-description
+      | Enter the destination ID and message
+
+  - if flash[:error].present? and flash[:status_code] != 200
+    .flash.flash-error
+      | 入力内容にミスがあります。
+
+  .line-bc
+    .balloon6
+      .faceicon
+        = image_tag 'github_icon.jpg'
+      .chatting
+        .says
+          p
+          | 送信する文章を入力してね。
+          br 200文字以内だよ。
+    dl
+      = form_tag('/push', method: :post, class: "form-group") do
+        dt
+          = text_field_tag :push_id, nil, {pattern: "^[0-9A-Za-z]+$", class: "form-control", placeholder: "ここに送信先IDを入力してね。いつかプルダウンにするよ"}
+        dt
+          = text_area_tag :text, nil, {class: "form-control", placeholder: "ここにメッセージを入力してね"}
+        dt
+          / http://zvub.hateblo.jp/entry/20150203/1422946649
+          = button_to "Send", {controller: 'linebot', action: 'push'}, {method: :post, class: "btn btn-block btn-primary"}

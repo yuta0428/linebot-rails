@@ -1,5 +1,7 @@
 {
   "name": "linebot-rails",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "primer-css": "^9.6.0"
+  }
 }
