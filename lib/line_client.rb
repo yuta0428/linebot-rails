@@ -29,7 +29,7 @@ class LineClient
 
   private
   def push(push_id, message)
-      client.reply_message(reply_token, message)
+      client.push_message(push_id, message)
   end
 
   private
