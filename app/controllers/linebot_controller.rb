@@ -23,10 +23,26 @@ class LinebotController < ApplicationController
     head :ok
   end
 
+  def new_push
+    render
+  end
+
+  def push
+    push_id, text = params[:push_id], params[:text]
+    status = line_client.push_text(push_id, text)
+    redirect_to :new_push, flash: { status_code: status.code }
+  end
+
+  # private
+  # def push(push_id, text)
+  #   line_client.push_text(push_id, text)
+  #   redirect_to :new_push
+  # end
+
   private
   def reply_text(replyToken, event_text)
-      text = event_text
-      line_client.reply_text(replyToken, text)
+    text = event_text
+    line_client.reply_text(replyToken, text)
   end
 
   private
