@@ -30,7 +30,7 @@ header.masthead
     dl
       = form_tag('/push', method: :post, class: "form-group") do
         dt
-          = text_field_tag :push_id, nil, {pattern: "^[0-9A-Za-z]+$", class: "form-control", placeholder: "ここに送信先IDを入力してね。いつかプルダウンにするよ"}
+          = text_field_tag :push_id, nil, {value: "Ce41742e3522baad1c319280706fdbeab", pattern: "^[0-9A-Za-z]+$", class: "form-control", placeholder: "ここに送信先IDを入力してね。いつかプルダウンにするよ"}
         dt
           = text_area_tag :text, nil, {class: "form-control", placeholder: "ここにメッセージを入力してね"}
         dt
