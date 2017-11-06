@@ -90,7 +90,6 @@ class LinebotController < ApplicationController
   def is_validate_signature
     unless Rails.env.development?
       signature = request.env["HTTP_X_LINE_SIGNATURE"]
-      p request, signature, request.body.read
       unless line_client.client.validate_signature(request.body.read, signature)
         render json: { status: 400, error: :'Bad Request' }, status: 400
       end
