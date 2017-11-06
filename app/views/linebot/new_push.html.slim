@@ -12,7 +12,7 @@ header.masthead
     p.Subhead-description
       | Enter the destination ID and message
 
-  - if flash[:status_code].present? and flash[:status_code] != 200
+  - if flash[:status_code].present? and flash[:status_code] != "200"
     .flash.flash-error
       | Error 
       = flash[:status_code]
