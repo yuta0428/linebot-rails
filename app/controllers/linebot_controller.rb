@@ -9,18 +9,18 @@ class LinebotController < ApplicationController
     body = request.body.read
 
     # メッセージをパース
+    response, text = nil # 画面出力用
     events = line_client.client.parse_events_from(body)
     events.each { |event|
       case event
       when Line::Bot::Event::Message
         case event.type
         when Line::Bot::Event::MessageType::Text
-          response = reply_text(event['replyToken'], event.message['text'])
-          p response
+          response, text = reply_text(event['replyToken'], event.message['text'])
         end
       end
     }
-    head :ok
+    render json: { response: response.to_s, text: text }
   end
 
   def new_push
@@ -41,8 +41,42 @@ class LinebotController < ApplicationController
 
   private
   def reply_text(replyToken, event_text)
-    text = event_text
-    line_client.reply_text(replyToken, text)
+    text = text_match_respond?(event_text)
+    text = text_match_hear?(event_text) if text == nil
+    text = text_match_hear_random?(event_text) if text == nil
+    text = text_match_all?(event_text) if text == nil
+    response = line_client.reply_text(replyToken, text) if text != nil
+    return response, text
+  end
+
+  private 
+  def text_match_respond?(text)
+    return nil if text !~ Regexp.new(Settings.mention) # マッチしない場合true
+    Settings.respond.each{ |res|
+      return res.msg unless text !~ Regexp.new(res.key) # マッチした場合false
+    }
+    return nil
+  end
+
+  private 
+  def text_match_hear?(text)
+    Settings.hear.each{ |res|
+      return res.msg unless text !~ Regexp.new(res.key) # マッチした場合false
+    }
+    return nil
+  end
+
+  private 
+  def text_match_hear_random?(text)
+    Settings.hear_random.each{ |res|
+      return res.msg.sample.text unless text !~ Regexp.new(res.key) # マッチした場合false
+    }
+    return nil
+  end
+
+  private 
+  def text_match_all?(text)
+    return Settings.all.msg.empty? ? nil : Settings.all.msg.sample.text
   end
 
   private
